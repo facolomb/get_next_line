@@ -4,8 +4,8 @@
 # include <stdlib.h>
 
 char	*get_next_line(int fd);
-int		is_new_line(const char *str);
+int		ft_is_new_line(const char *str);
 char	*ft_strjoin(char const *s1, char const *s2);
-size_t	ft_strlen(const char *c);
+char	*ft_strdup(const char *s1);
 
 #endif

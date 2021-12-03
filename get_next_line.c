@@ -10,25 +10,58 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
-#define BUFFER_SIZE
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <stdio.h>
+
+char	*ft_fill_line(char *line, char *readed)
+{
+	if (!line)
+		line = ft_strdup(readed);
+	else
+		line = ft_strjoin(line, readed);
+	return (line);
+}
 
 char	*get_next_line(int fd)
 {
-    char	*readed;
+    char	readed[BUFFER_SIZE + 1];
 	char	*line;
 	int		nb_bytes;
 
-	readed = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (!readed)
-		return (NULL);
-	while (!(is_new_line(line)))
+	nb_bytes = 1;
+	line = NULL;
+	while (ft_is_new_line(line) == 0 && nb_bytes > 0)
 	{
 		nb_bytes = read(fd, readed, BUFFER_SIZE);
-		if (nb_bytes < 0)
+		if (nb_bytes <= 0 && !line)
 			return (NULL);
+		if (nb_bytes == 0 && line != NULL)
+			return (line);
 		readed[nb_bytes] = '\0';
+		line = ft_fill_line(line, readed);
 	}
-	line = ft_strjoin(line, readed);
-	free(readed);
 	return (line);
 }
+/*
+int	main(void)
+{
+	int	fd;
+	int	i;
+
+	i = 0;
+	fd = open("test.txt", O_RDONLY);
+	if (fd < 0)
+	{
+		printf("open failed");
+		return (0);
+	}
+	while (i <= 2)
+	{
+		printf("%s", get_next_line(fd));
+		i++;
+	}
+	close(fd);
+	return (0);
+}
+*/
