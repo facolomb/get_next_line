@@ -1,5 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: facolomb <facolomb@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/16 11:13:34 by facolomb          #+#    #+#             */
+/*   Updated: 2021/12/16 11:13:34 by facolomb         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
-#define BUFFER_SIZE 1
 
 static void	ft_read_line(int fd, char *buffer, char **str)
 {
@@ -11,7 +22,7 @@ static void	ft_read_line(int fd, char *buffer, char **str)
 		i = read(fd, buffer, BUFFER_SIZE);
 		while (i > 0)
 		{
-			buffer[i] = 0;
+			buffer[i] = '\0';
 			if (!*str)
 				*str = ft_substr(buffer, 0, i);
 			else
@@ -21,7 +32,7 @@ static void	ft_read_line(int fd, char *buffer, char **str)
 				free(temp);
 			}
 			if (ft_strchr(buffer, '\n'))
-				break;
+				break ;
 			i = read(fd, buffer, BUFFER_SIZE);
 		}
 	}
@@ -67,5 +78,10 @@ char	*get_next_line(int fd)
 		return (0);
 	}
 	ft_read_line(fd, buffer, &str);
+	if (str != NULL && str[0] == '\0')
+	{
+		free(str);
+		return (NULL);
+	}
 	return (ft_process(&str));
 }
